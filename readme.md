@@ -1,4 +1,4 @@
-Project Name : SkillForgeX: AI-Powered Skill Tracker & Resume Optimization System
+Project Name : SkillForgeX : AI-Powered Skill Tracker & Resume Optimization System
 Submitted by: M Boobeshwaran
 Date: 14-07-2025
 
