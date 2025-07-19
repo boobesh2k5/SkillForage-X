@@ -1,0 +1,2420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillForgeX - AI Career Assistant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6c63ff;
+            --secondary: #4d44db;
+            --accent: #ff6584;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --info: #17a2b8;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7ff;
+            overflow-x: hidden;
+            color: #444;
+            scroll-behavior: smooth;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, #f5f7ff 0%, #e8ecff 100%);
+            border-radius: 0 0 30px 30px;
+            padding: 6rem 0;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(108, 99, 255, 0.1) 0%, rgba(108, 99, 255, 0) 70%);
+            border-radius: 50%;
+        }
+        
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            bottom: -100px;
+            left: -100px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 101, 132, 0.1) 0%, rgba(255, 101, 132, 0) 70%);
+            border-radius: 50%;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            background-color: white;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .card.animate {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        
+        .feature-icon.animate {
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        
+        .feature-icon:hover {
+            transform: rotate(15deg) scale(1.1);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .dashboard-card {
+            min-height: 300px;
+            position: relative;
+        }
+        
+        .skill-progress {
+            height: 10px;
+            border-radius: 5px;
+            background-color: #e9ecef;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 5px;
+            transition: width 1s ease-in-out;
+        }
+        
+        /* Navigation Styles */
+        .navbar-nav .nav-link {
+            position: relative;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+            color: var(--dark);
+            font-weight: 500;
+        }
+        
+        .navbar-nav .nav-link.active {
+            color: var(--primary) !important;
+            font-weight: 600;
+        }
+        
+        .navbar-nav .nav-link:hover {
+            color: var(--primary);
+        }
+        
+        @media (max-width: 991px) {
+            .navbar-nav .nav-link.active {
+                background-color: rgba(108, 99, 255, 0.1);
+                border-radius: 5px;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            70% {
+                transform: scale(1.1);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(108, 99, 255, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(108, 99, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(108, 99, 255, 0); }
+        }
+        
+        .article-card {
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .article-card.animate {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+        
+        .article-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .footer {
+            background: linear-gradient(135deg, var(--dark), #000);
+            color: white;
+            padding: 3rem 0;
+            position: relative;
+        }
+        
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+        
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px) rotate(10deg);
+        }
+        
+        /* Micro-interactions */
+        .hover-grow {
+            transition: transform 0.3s ease;
+        }
+        
+        .hover-grow:hover {
+            transform: scale(1.05);
+        }
+        
+        .btn-hover-effect {
+            transition: all 0.3s ease;
+        }
+        
+        .btn-hover-effect:hover {
+            letter-spacing: 0.5px;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary);
+        }
+        
+        /* Glow effect */
+        .glow {
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 5px rgba(108, 99, 255, 0.5);
+            }
+            to {
+                box-shadow: 0 0 20px rgba(108, 99, 255, 0.8);
+            }
+        }
+        
+        /* New features */
+        .skill-badge {
+            transition: all 0.3s ease;
+        }
+        
+        .skill-badge:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--primary), var(--accent));
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+        
+        .timeline-item.animate {
+            animation: fadeInLeft 0.5s ease forwards;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -30px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            border: 2px solid white;
+        }
+        
+        /* Enhanced Analysis Section */
+        .analysis-container {
+            transition: all 0.5s ease;
+            max-height: 0;
+            overflow: hidden;
+        }
+        
+        .analysis-container.show {
+            max-height: 2000px;
+        }
+        
+        .progress-loading {
+            background: linear-gradient(90deg, #f5f7ff, var(--primary), #f5f7ff);
+            background-size: 200% 200%;
+            animation: progress-loading 2s ease infinite;
+        }
+        
+        @keyframes progress-loading {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .analysis-result-card {
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+        
+        .strength-item {
+            border-left-color: var(--success);
+        }
+        
+        .improvement-item {
+            border-left-color: var(--warning);
+        }
+        
+        /* File Upload Styles */
+        .file-upload-container {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .file-upload-input {
+            position: absolute;
+            font-size: 100px;
+            opacity: 0;
+            right: 0;
+            top: 0;
+            cursor: pointer;
+        }
+        
+        .upload-status {
+            display: none;
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: rgba(40, 167, 69, 0.1);
+            border-left: 4px solid var(--success);
+        }
+        
+        .upload-error {
+            background-color: rgba(220, 53, 69, 0.1);
+            border-left: 4px solid var(--danger);
+        }
+        
+        /* Enhanced Button Effects */
+        .action-btn {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .action-btn:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+        
+        .action-btn:focus:not(:active)::after {
+            animation: ripple 1s ease-out;
+        }
+        
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(20, 20);
+                opacity: 0;
+            }
+        }
+        
+        /* Task List Styles */
+        .task-list-item {
+            transition: all 0.3s ease;
+        }
+        
+        .task-list-item:hover {
+            background-color: rgba(108, 99, 255, 0.05);
+        }
+        
+        .task-list-item.completed {
+            background-color: rgba(40, 167, 69, 0.05);
+        }
+        
+        .delete-task-btn {
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .task-list-item:hover .delete-task-btn {
+            opacity: 1;
+        }
+        
+        /* Resource Filter Styles */
+        .resource-filter .badge {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .resource-filter .badge:hover {
+            transform: scale(1.05);
+        }
+        
+        .resource-filter .badge.active {
+            background-color: var(--primary) !important;
+        }
+        
+        /* Animation improvements */
+        .animate__animated {
+            animation-duration: 0.6s;
+            animation-fill-mode: both;
+        }
+        
+        .animate__fadeInUp {
+            animation-name: fadeInUp;
+        }
+        
+        .animate__fadeInLeft {
+            animation-name: fadeInLeft;
+        }
+        
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        /* Roadmap stage styles */
+        .roadmap-stage {
+            transition: all 0.3s ease;
+            opacity: 0.5;
+            transform: scale(0.9);
+        }
+        
+        .roadmap-stage.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .roadmap-stage.active .feature-icon {
+            background: linear-gradient(45deg, var(--accent), var(--secondary));
+            box-shadow: 0 5px 15px rgba(255, 101, 132, 0.3);
+        }
+        
+        .roadmap-stage.active h5 {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        /* Timeline active states */
+        .timeline-item.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .timeline-item.active::before {
+            background-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(255, 101, 132, 0.2);
+        }
+        
+        .timeline-item.active h5 {
+            color: var(--primary);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 3rem 0;
+                text-align: center;
+            }
+            
+            .hero-section h1 {
+                font-size: 2.2rem;
+            }
+            
+            .feature-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+            
+            .analysis-container {
+                padding: 1rem;
+            }
+        }
+        
+        /* Scroll to top button */
+        .scroll-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3);
+        }
+        
+        .scroll-top.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .scroll-top:hover {
+            background: var(--secondary);
+            transform: translateY(-5px) scale(1.05);
+        }
+        
+        /* Performance optimizations */
+        .will-change {
+            will-change: transform, opacity;
+        }
+    </style>
+</head>
+<body>
+    <!-- Scroll to top button -->
+    <div class="scroll-top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+    
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-bolt me-2"></i>SkillForgeX
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#resume">Resume AI</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#skills">Skill Tracker</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#resources">Resources</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#roadmap">Roadmap</a>
+                    </li>
+                    <li class="nav-item ms-lg-3">
+                        <a class="btn btn-primary btn-hover-effect" href="#upload">
+                            <i class="fas fa-upload me-2"></i>Upload Resume
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold mb-4">Forge Your <span class="text-primary">Dream Career</span> with AI</h1>
+                    <p class="lead mb-4">SkillForgeX combines AI-powered resume optimization with personalized skill tracking to help you land your dream job faster.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#upload" class="btn btn-primary btn-lg pulse">
+                            <i class="fas fa-magic me-2"></i>Optimize Resume
+                        </a>
+                        <a href="#dashboard" class="btn btn-outline-primary btn-lg">
+                            <i class="fas fa-chart-line me-2"></i>View Dashboard
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6 d-none d-lg-block">
+                    <img src="https://illustrations.popsy.co/amber/digital-nomad.svg" alt="Career Growth" class="img-fluid floating will-change">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Your <span class="text-primary">AI-Powered</span> Dashboard</h2>
+                <p class="text-muted">Real-time insights into your career progress</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <div class="feature-icon mx-auto will-change">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <h5 class="card-title">Skill Score</h5>
+                            <h2 class="text-primary fw-bold">84</h2>
+                            <p class="text-muted">+12% from last month</p>
+                            <div class="skill-progress">
+                                <div class="progress-bar" style="width: 84%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <div class="feature-icon mx-auto will-change">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <h5 class="card-title">Resume Grade</h5>
+                            <h2 class="text-primary fw-bold">A-</h2>
+                            <p class="text-muted">3 improvements suggested</p>
+                            <div class="skill-progress">
+                                <div class="progress-bar" style="width: 87%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <div class="feature-icon mx-auto will-change">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <h5 class="card-title">Daily Streak</h5>
+                            <h2 class="text-primary fw-bold">14</h2>
+                            <p class="text-muted">days of consistent learning</p>
+                            <div class="skill-progress">
+                                <div class="progress-bar" style="width: 70%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <div class="feature-icon mx-auto will-change">
+                                <i class="fas fa-bullseye"></i>
+                            </div>
+                            <h5 class="card-title">Job Match</h5>
+                            <h2 class="text-primary fw-bold">92%</h2>
+                            <p class="text-muted">for Full Stack roles</p>
+                            <div class="skill-progress">
+                                <div class="progress-bar" style="width: 92%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-lg-8">
+                    <div class="card dashboard-card">
+                        <div class="card-body">
+                            <h4 class="card-title mb-4"><i class="fas fa-chart-bar text-primary me-2"></i>Skill Progress Over Time</h4>
+                            <canvas id="lineChart" height="250"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card dashboard-card">
+                        <div class="card-body">
+                            <h4 class="card-title mb-4"><i class="fas fa-trophy text-primary me-2"></i>Top Skills</h4>
+                            <div class="d-flex flex-wrap gap-2 mb-3">
+                                <span class="badge bg-primary skill-badge">JavaScript</span>
+                                <span class="badge bg-primary skill-badge">React</span>
+                                <span class="badge bg-primary skill-badge">Node.js</span>
+                                <span class="badge bg-success skill-badge">MongoDB</span>
+                                <span class="badge bg-success skill-badge">Express</span>
+                                <span class="badge bg-warning skill-badge">System Design</span>
+                                <span class="badge bg-warning skill-badge">Algorithms</span>
+                            </div>
+                            <h5 class="mt-3">Skill Distribution</h5>
+                            <canvas id="doughnutChart" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resume AI Section -->
+    <section id="resume" class="py-5 bg-light">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <img src="https://illustrations.popsy.co/amber/designer.svg" alt="Resume Analysis" class="img-fluid will-change">
+                </div>
+                <div class="col-lg-6">
+                    <h2 class="fw-bold mb-4"><span class="text-primary">AI-Powered</span> Resume Optimization</h2>
+                    <p class="lead mb-4">Upload your resume and get instant feedback on how to improve it for specific job roles.</p>
+                    
+                    <div class="card mb-4 hover-grow will-change">
+                        <div class="card-body">
+                            <h5><i class="fas fa-check-circle text-success me-2"></i> Keyword Optimization</h5>
+                            <p class="text-muted">Our AI scans your resume for missing keywords from job descriptions.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card mb-4 hover-grow will-change">
+                        <div class="card-body">
+                            <h5><i class="fas fa-check-circle text-success me-2"></i> ATS Compatibility</h5>
+                            <p class="text-muted">Ensure your resume passes through Applicant Tracking Systems.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card hover-grow will-change">
+                        <div class="card-body">
+                            <h5><i class="fas fa-check-circle text-success me-2"></i> Skill Gap Analysis</h5>
+                            <p class="text-muted">Identify missing skills for your target job roles.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resume Upload Section -->
+    <section id="upload" class="py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="text-center mb-5">
+                        <h2 class="fw-bold">Upload Your Resume for <span class="text-primary">Instant Analysis</span></h2>
+                        <p class="lead text-muted">Get personalized recommendations to make your resume stand out</p>
+                    </div>
+                    
+                    <div class="card border-0 shadow-lg will-change">
+                        <div class="card-body p-4">
+                            <div class="file-upload-container text-center py-5">
+                                <div id="uploadArea" class="p-4 border-2 border-dashed rounded-3">
+                                    <i class="fas fa-file-upload display-4 text-primary mb-3"></i>
+                                    <h5 class="mb-3">Drag & Drop Your Resume Here</h5>
+                                    <p class="text-muted mb-4">Supported formats: PDF, DOCX, TXT (Max 5MB)</p>
+                                    <input type="file" id="resumeUpload" class="d-none" accept=".pdf,.docx,.txt">
+                                    <button id="browseBtn" class="btn btn-primary btn-lg px-4">
+                                        <i class="fas fa-folder-open me-2"></i>Browse Files
+                                    </button>
+                                </div>
+                                
+                                <div id="fileInfo" class="mt-4 text-start"></div>
+                                
+                                <div id="uploadStatus" class="alert alert-info mt-3 mb-0 d-none">
+                                    <div class="d-flex align-items-center">
+                                        <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                                        <span id="statusText">Uploading file...</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="analysisProgress" class="analysis-container">
+                                <div class="analysis-progress mt-4">
+                                    <h4 class="mb-4"><i class="fas fa-chart-line text-primary me-2"></i>Analyzing Your Resume</h4>
+                                    <div class="progress mb-3" style="height: 10px;">
+                                        <div id="analysisBar" class="progress-bar progress-bar-striped progress-bar-animated" 
+                                             role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <p class="text-muted mb-0" id="analysisStatus">Initializing analysis engine...</p>
+                                </div>
+                            </div>
+                            
+                            <div id="analysisResults" class="analysis-container mt-4">
+                                <div class="card border-0 shadow-sm">
+                                    <div class="card-body p-4">
+                                        <div class="d-flex justify-content-between align-items-center mb-4">
+                                            <h4 class="mb-0"><i class="fas fa-chart-pie text-primary me-2"></i>Analysis Results</h4>
+                                            <span class="badge bg-success"><i class="fas fa-check-circle me-1"></i>Completed</span>
+                                        </div>
+                                        
+                                        <div class="alert alert-success animate__animated animate__fadeIn">
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-check-circle fa-2x me-3"></i>
+                                                <div>
+                                                    <h5 class="mb-1">Overall Score: <strong id="overallScore">87</strong>/100</h5>
+                                                    <p class="mb-0" id="scoreFeedback">Good - Your resume is above average but could be improved</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row mt-4">
+                                            <div class="col-lg-6">
+                                                <h5 class="mb-3"><i class="fas fa-check-circle text-success me-2"></i>Key Strengths</h5>
+                                                <div id="strengthsList">
+                                                    <!-- Strengths will be added dynamically -->
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <h5 class="mb-3"><i class="fas fa-exclamation-triangle text-warning me-2"></i>Areas for Improvement</h5>
+                                                <div id="improvementsList">
+                                                    <!-- Improvements will be added dynamically -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="d-flex flex-wrap gap-3 mt-4">
+                                            <button id="downloadBtn" class="btn btn-primary action-btn px-4">
+                                                <i class="fas fa-download me-2"></i>Download Sample Optimized Resume
+                                            </button>
+                                            <button id="resourcesBtn" class="btn btn-outline-primary action-btn px-4">
+                                                <i class="fas fa-book-open me-2"></i>View Learning Resources
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skill Tracker Section -->
+    <section id="skills" class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Your <span class="text-primary">Skill Development</span> Tracker</h2>
+                <p class="text-muted">Track and improve your skills systematically</p>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card dashboard-card mb-4">
+                        <div class="card-body">
+                            <h4 class="card-title mb-4"><i class="fas fa-chart-line text-primary me-2"></i>Skill Progress</h4>
+                            <canvas id="skillChart" height="250"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="card dashboard-card mb-4">
+                        <div class="card-body">
+                            <h4 class="card-title mb-4"><i class="fas fa-tasks text-primary me-2"></i>Daily Learning Tasks</h4>
+                            
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5>Today's Goals</h5>
+                                <span class="badge bg-primary" id="taskCompletion">3/5 completed</span>
+                            </div>
+                            
+                            <div class="list-group" id="taskList">
+                                <div class="list-group-item task-list-item d-flex justify-content-between align-items-center">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" checked id="task1">
+                                        <label class="form-check-label" for="task1">Read React documentation</label>
+                                    </div>
+                                    <div>
+                                        <span class="badge bg-success me-2">Completed</span>
+                                        <button class="btn btn-sm btn-outline-danger delete-task-btn">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="list-group-item task-list-item d-flex justify-content-between align-items-center">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" checked id="task2">
+                                        <label class="form-check-label" for="task2">Practice algorithms</label>
+                                    </div>
+                                    <div>
+                                        <span class="badge bg-success me-2">Completed</span>
+                                        <button class="btn btn-sm btn-outline-danger delete-task-btn">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="list-group-item task-list-item d-flex justify-content-between align-items-center">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" checked id="task3">
+                                        <label class="form-check-label" for="task3">Work on portfolio project</label>
+                                    </div>
+                                    <div>
+                                        <span class="badge bg-success me-2">Completed</span>
+                                        <button class="btn btn-sm btn-outline-danger delete-task-btn">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="list-group-item task-list-item d-flex justify-content-between align-items-center">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="task4">
+                                        <label class="form-check-label" for="task4">Watch system design video</label>
+                                    </div>
+                                    <div>
+                                        <span class="badge bg-warning me-2">Pending</span>
+                                        <button class="btn btn-sm btn-outline-danger delete-task-btn">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="list-group-item task-list-item d-flex justify-content-between align-items-center">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="task5">
+                                        <label class="form-check-label" for="task5">Update LinkedIn profile</label>
+                                    </div>
+                                    <div>
+                                        <span class="badge bg-warning me-2">Pending</span>
+                                        <button class="btn btn-sm btn-outline-danger delete-task-btn">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button class="btn btn-outline-primary mt-3 w-100" id="addTaskBtn">
+                                <i class="fas fa-plus me-2"></i>Add New Task
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-lg-12">
+                    <div class="card dashboard-card">
+                        <div class="card-body">
+                            <h4 class="card-title mb-4"><i class="fas fa-map-marked-alt text-primary me-2"></i>Skill Development Roadmap</h4>
+                            <div class="timeline">
+                                <div class="timeline-item will-change active" id="foundation-stage">
+                                    <h5>Foundation (1-2 weeks)</h5>
+                                    <p class="text-muted">Master JavaScript fundamentals, HTML/CSS basics</p>
+                                </div>
+                                <div class="timeline-item will-change" id="frontend-stage">
+                                    <h5>Frontend (3-4 weeks)</h5>
+                                    <p class="text-muted">Learn React, state management, and responsive design</p>
+                                </div>
+                                <div class="timeline-item will-change" id="backend-stage">
+                                    <h5>Backend (3-4 weeks)</h5>
+                                    <p class="text-muted">Node.js, Express, database integration</p>
+                                </div>
+                                <div class="timeline-item will-change" id="advanced-stage">
+                                    <h5>Advanced (4+ weeks)</h5>
+                                    <p class="text-muted">System design, algorithms, cloud deployment</p>
+                                </div>
+                            </div>
+                            
+                            <div class="progress mt-4" style="height: 10px;">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: 25%;" 
+                                     aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" id="roadmapProgress"></div>
+                            </div>
+                            
+                            <div class="text-center mt-4">
+                                <button class="btn btn-outline-primary me-2" id="prevStageBtn">
+                                    <i class="fas fa-arrow-left me-2"></i>Previous Stage
+                                </button>
+                                <button class="btn btn-primary" id="nextStageBtn">
+                                    Next Stage<i class="fas fa-arrow-right ms-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resources Section -->
+    <section id="resources" class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold"><span class="text-primary">Personalized</span> Learning Resources</h2>
+                <p class="text-muted">Curated content based on your skill gaps and goals</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="card article-card h-100">
+                        <img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" class="card-img-top" alt="React Article" style="height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                            <span class="badge bg-primary mb-2">React</span>
+                            <h5 class="card-title">Advanced React Patterns</h5>
+                            <p class="card-text text-muted">Learn about compound components, render props, and higher-order components in React.</p>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <a href="#" class="btn btn-sm btn-primary read-article-btn">Read Article</a>
+                            <small class="text-muted float-end mt-1">15 min read</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-4">
+                    <div class="card article-card h-100">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" class="card-img-top" alt="Node.js Article" style="height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                            <span class="badge bg-primary mb-2">Node.js</span>
+                            <h5 class="card-title">Node.js Performance Optimization</h5>
+                            <p class="card-text text-muted">Techniques to improve your Node.js application performance and reduce latency.</p>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <a href="#" class="btn btn-sm btn-primary read-article-btn">Read Article</a>
+                            <small class="text-muted float-end mt-1">12 min read</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-4">
+                    <div class="card article-card h-100">
+                        <img src="https://images.unsplash.com/photo-1481487196290-c152efe083f5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1442&q=80" class="card-img-top" alt="System Design Article" style="height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                            <span class="badge bg-primary mb-2">System Design</span>
+                            <h5 class="card-title">Designing a URL Shortener</h5>
+                            <p class="card-text text-muted">Step-by-step guide to designing a scalable URL shortening service like bit.ly.</p>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <a href="#" class="btn btn-sm btn-primary read-article-btn">Read Article</a>
+                            <small class="text-muted float-end mt-1">20 min read</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-5">
+                <a href="#" class="btn btn-primary" id="viewAllResourcesBtn">
+                    <i class="fas fa-book-open me-2"></i>View All Resources
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Career Roadmap Section -->
+    <section id="roadmap" class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Your <span class="text-primary">Career</span> Roadmap</h2>
+                <p class="text-muted">Personalized path to your dream job</p>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card dashboard-card">
+                        <div class="card-body">
+                            <div class="row text-center">
+                                <div class="col-md-3 roadmap-stage active" id="foundation-stage-career">
+                                    <div class="feature-icon mx-auto mb-3 will-change">
+                                        <i class="fas fa-graduation-cap"></i>
+                                    </div>
+                                    <h5>Foundation</h5>
+                                    <p class="text-muted">Master core concepts</p>
+                                </div>
+                                <div class="col-md-3 roadmap-stage" id="projects-stage-career">
+                                    <div class="feature-icon mx-auto mb-3 will-change">
+                                        <i class="fas fa-laptop-code"></i>
+                                    </div>
+                                    <h5>Projects</h5>
+                                    <p class="text-muted">Build portfolio</p>
+                                </div>
+                                <div class="col-md-3 roadmap-stage" id="resume-stage-career">
+                                    <div class="feature-icon mx-auto mb-3 will-change">
+                                        <i class="fas fa-file-alt"></i>
+                                    </div>
+                                    <h5>Resume</h5>
+                                    <p class="text-muted">Optimize for ATS</p>
+                                </div>
+                                <div class="col-md-3 roadmap-stage" id="interview-stage-career">
+                                    <div class="feature-icon mx-auto mb-3 will-change">
+                                        <i class="fas fa-briefcase"></i>
+                                    </div>
+                                    <h5>Interview</h5>
+                                    <p class="text-muted">Ace technical rounds</p>
+                                </div>
+                            </div>
+                            
+                            <div class="progress mt-4" style="height: 10px;">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: 25%;" 
+                                     aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" id="roadmapProgressBar"></div>
+                            </div>
+                            
+                            <div class="text-center mt-4">
+                                <button class="btn btn-outline-primary me-2" id="prevStageBtnRoadmap">
+                                    <i class="fas fa-arrow-left me-2"></i>Previous Stage
+                                </button>
+                                <button class="btn btn-primary" id="nextStageBtnRoadmap">
+                                    Next Stage<i class="fas fa-arrow-right ms-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <h3 class="text-white mb-4"><i class="fas fa-bolt me-2"></i>SkillForgeX</h3>
+                    <p>Your AI-powered career assistant is ready to help you grow.</p>
+                    <div class="d-flex gap-3 mt-4">
+                        <a href="https://twitter.com" target="_blank" class="social-icon hover-grow"><i class="fab fa-twitter"></i></a>
+                        <a href="https://linkedin.com" target="_blank" class="social-icon hover-grow"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://github.com" target="_blank" class="social-icon hover-grow"><i class="fab fa-github"></i></a>
+                        <a href="https://youtube.com" target="_blank" class="social-icon hover-grow"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                    <h5 class="text-white mb-4">Features</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#resume" class="text-white-50">Resume Analysis</a></li>
+                        <li class="mb-2"><a href="#skills" class="text-white-50">Skill Tracking</a></li>
+                        <li class="mb-2"><a href="#resources" class="text-white-50">Learning Resources</a></li>
+                        <li class="mb-2"><a href="#dashboard" class="text-white-50">Job Matching</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                    <h5 class="text-white mb-4">Resources</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#resources" class="text-white-50">Blog</a></li>
+                        <li class="mb-2"><a href="#resources" class="text-white-50">Tutorials</a></li>
+                        <li class="mb-2"><a href="#resources" class="text-white-50">Documentation</a></li>
+                        <li class="mb-2"><a href="#resources" class="text-white-50">API</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-4 col-md-4">
+                    <h5 class="text-white mb-4">Newsletter</h5>
+                    <p class="text-white-50 mb-4">Subscribe to get weekly career tips and resources.</p>
+                    <div class="input-group mb-3">
+                        <input type="email" class="form-control" placeholder="Your email" id="newsletterEmail">
+                        <button class="btn btn-primary" type="button" id="subscribeBtn">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+            
+            <hr class="my-4 bg-white-10">
+            
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-0">© 2025 SkillForgeX. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <p class="mb-0">Created By <strong>Boobesh</strong> | Full Stack Intern | Cognifyz Technologies</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Scroll to top button
+            const scrollTopBtn = document.querySelector('.scroll-top');
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    scrollTopBtn.classList.add('show');
+                } else {
+                    scrollTopBtn.classList.remove('show');
+                }
+            });
+            
+            scrollTopBtn.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // Initialize animations for elements
+            function initAnimations() {
+                // Cards
+                const cards = document.querySelectorAll('.card');
+                cards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.classList.add('animate');
+                    }, 100 * index);
+                });
+                
+                // Feature icons
+                const featureIcons = document.querySelectorAll('.feature-icon');
+                featureIcons.forEach((icon, index) => {
+                    setTimeout(() => {
+                        icon.classList.add('animate');
+                    }, 150 * index);
+                });
+                
+                // Timeline items
+                const timelineItems = document.querySelectorAll('.timeline-item');
+                timelineItems.forEach((item, index) => {
+                    setTimeout(() => {
+                        item.classList.add('animate');
+                    }, 200 * index);
+                });
+                
+                // Article cards
+                const articleCards = document.querySelectorAll('.article-card');
+                articleCards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.classList.add('animate');
+                    }, 100 * index);
+                });
+            }
+            
+            // Initialize Charts
+            const radarCtx = document.getElementById('skillChart').getContext('2d');
+            const skillChart = new Chart(radarCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['JavaScript', 'React', 'Node.js', 'System Design', 'Algorithms', 'CSS'],
+                    datasets: [{
+                        label: 'Current Skills',
+                        data: [85, 78, 82, 65, 70, 75],
+                        backgroundColor: 'rgba(108, 99, 255, 0.2)',
+                        borderColor: 'rgba(108, 99, 255, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(108, 99, 255, 1)',
+                        pointRadius: 4
+                    }, {
+                        label: 'Target Skills',
+                        data: [90, 85, 88, 80, 85, 85],
+                        backgroundColor: 'rgba(255, 101, 132, 0.2)',
+                        borderColor: 'rgba(255, 101, 132, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(255, 101, 132, 1)',
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    scales: {
+                        r: {
+                            angleLines: { display: true },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'top' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.raw + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            const lineCtx = document.getElementById('lineChart').getContext('2d');
+            const lineChart = new Chart(lineCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Skill Score',
+                        data: [65, 70, 72, 75, 80, 84],
+                        borderColor: 'rgba(108, 99, 255, 1)',
+                        backgroundColor: 'rgba(108, 99, 255, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { mode: 'index', intersect: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: false, min: 50, max: 100 }
+                    }
+                }
+            });
+            
+            const doughnutCtx = document.getElementById('doughnutChart').getContext('2d');
+            const doughnutChart = new Chart(doughnutCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Frontend', 'Backend', 'Database', 'DevOps'],
+                    datasets: [{
+                        data: [35, 30, 20, 15],
+                        backgroundColor: [
+                            'rgba(108, 99, 255, 0.8)',
+                            'rgba(255, 101, 132, 0.8)',
+                            'rgba(40, 167, 69, 0.8)',
+                            'rgba(255, 193, 7, 0.8)'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    cutout: '70%',
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
+            
+            // Resume Analysis Functionality
+            const resumeUpload = document.getElementById('resumeUpload');
+            const browseBtn = document.getElementById('browseBtn');
+            const uploadArea = document.getElementById('uploadArea');
+            const fileInfo = document.getElementById('fileInfo');
+            const uploadStatus = document.getElementById('uploadStatus');
+            const statusText = document.getElementById('statusText');
+            const analysisProgress = document.getElementById('analysisProgress');
+            const analysisResults = document.getElementById('analysisResults');
+            const analysisBar = document.getElementById('analysisBar');
+            const analysisStatus = document.getElementById('analysisStatus');
+            const overallScore = document.getElementById('overallScore');
+            const scoreFeedback = document.getElementById('scoreFeedback');
+            const strengthsList = document.getElementById('strengthsList');
+            const improvementsList = document.getElementById('improvementsList');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const resourcesBtn = document.getElementById('resourcesBtn');
+            
+            // File upload event handlers
+            browseBtn.addEventListener('click', () => resumeUpload.click());
+            
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('border-primary', 'bg-light');
+            });
+            
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('border-primary', 'bg-light');
+            });
+            
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('border-primary', 'bg-light');
+                if (e.dataTransfer.files.length) {
+                    resumeUpload.files = e.dataTransfer.files;
+                    handleFileUpload(e.dataTransfer.files[0]);
+                }
+            });
+            
+            resumeUpload.addEventListener('change', (e) => {
+                if (e.target.files.length) {
+                    handleFileUpload(e.target.files[0]);
+                }
+            });
+            
+            function handleFileUpload(file) {
+                // Validate file
+                const validTypes = ['application/pdf', 
+                                  'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 
+                                  'text/plain'];
+                const maxSize = 5 * 1024 * 1024; // 5MB
+                
+                if (!validTypes.includes(file.type)) {
+                    showAlert('Invalid File Type', 'Please upload a PDF, DOCX, or TXT file.', 'error');
+                    return;
+                }
+                
+                if (file.size > maxSize) {
+                    showAlert('File Too Large', 'Maximum file size is 5MB. Please choose a smaller file.', 'error');
+                    return;
+                }
+                
+                // Show file info
+                fileInfo.innerHTML = `
+                    <div class="alert alert-info animate__animated animate__fadeIn">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="fas fa-file-pdf me-2"></i>
+                                <strong>${file.name}</strong> (${(file.size / 1024 / 1024).toFixed(2)} MB)
+                            </div>
+                            <button id="cancelUpload" class="btn btn-sm btn-outline-danger">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                // Add cancel handler
+                document.getElementById('cancelUpload').addEventListener('click', resetUpload);
+                
+                // Start upload process
+                uploadFile(file);
+            }
+            
+            function uploadFile(file) {
+                // Show upload status
+                uploadStatus.classList.remove('d-none');
+                statusText.textContent = 'Uploading your resume...';
+                
+                // Hide previous results
+                analysisResults.classList.remove('show');
+                
+                // Simulate upload (replace with actual API call)
+                setTimeout(() => {
+                    statusText.textContent = 'File uploaded! Starting analysis...';
+                    
+                    // Show analysis progress
+                    setTimeout(() => {
+                        uploadStatus.classList.add('d-none');
+                        analysisProgress.classList.add('show');
+                        startAnalysis();
+                    }, 1000);
+                }, 1500);
+            }
+            
+            function startAnalysis() {
+                let progress = 0;
+                const analysisSteps = [
+                    "Extracting text content...",
+                    "Analyzing keyword density...",
+                    "Checking ATS compatibility...",
+                    "Evaluating skill presentation...",
+                    "Assessing impact metrics...",
+                    "Generating recommendations..."
+                ];
+                
+                // Reset progress bar
+                analysisBar.style.width = '0%';
+                analysisBar.setAttribute('aria-valuenow', '0');
+                
+                const interval = setInterval(() => {
+                    progress += Math.floor(Math.random() * 10) + 5;
+                    if (progress > 100) progress = 100;
+                    
+                    analysisBar.style.width = `${progress}%`;
+                    analysisBar.setAttribute('aria-valuenow', progress);
+                    
+                    // Update status text
+                    const stepIndex = Math.min(Math.floor(progress / 20), analysisSteps.length - 1);
+                    analysisStatus.textContent = analysisSteps[stepIndex];
+                    
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        setTimeout(() => {
+                            analysisProgress.classList.remove('show');
+                            showAnalysisResults();
+                        }, 500);
+                    }
+                }, 800);
+            }
+            
+            function showAnalysisResults() {
+                // Generate random score between 60-95 for demo purposes
+                const score = Math.floor(Math.random() * 36) + 60;
+                overallScore.textContent = score;
+                
+                // Set feedback based on score
+                if (score >= 90) {
+                    scoreFeedback.textContent = 'Excellent - Your resume is well-optimized!';
+                } else if (score >= 80) {
+                    scoreFeedback.textContent = 'Good - Your resume is above average but could be improved';
+                } else if (score >= 70) {
+                    scoreFeedback.textContent = 'Fair - Several areas need improvement';
+                } else {
+                    scoreFeedback.textContent = 'Needs Work - Significant improvements recommended';
+                }
+                
+                // Generate dynamic strengths and improvements
+                strengthsList.innerHTML = '';
+                improvementsList.innerHTML = '';
+                
+                const allStrengths = [
+                    {title: "Strong technical skills section", desc: "Your technical skills are well-presented and comprehensive"},
+                    {title: "Clear work experience timeline", desc: "Your career progression is easy to follow"},
+                    {title: "Good use of action verbs", desc: "You effectively use powerful action words"},
+                    {title: "Appropriate length", desc: "Your resume is concise without being too brief"},
+                    {title: "Good section organization", desc: "The layout makes information easy to find"}
+                ];
+                
+                const allImprovements = [
+                    {title: "Add more quantifiable achievements", desc: "Include metrics to demonstrate your impact"},
+                    {title: "Include missing keywords: 'REST API', 'Agile'", desc: "These are important for your target roles"},
+                    {title: "Shorten summary section", desc: "Keep it to 2-3 concise sentences"},
+                    {title: "Improve formatting consistency", desc: "Use uniform spacing and bullet styles"},
+                    {title: "Add more soft skills", desc: "Include teamwork, communication, etc."},
+                    {title: "Optimize for ATS", desc: "Some formatting may not parse well in ATS systems"},
+                    {title: "Include certifications", desc: "List relevant certifications if you have them"}
+                ];
+                
+                // Select random strengths (2-4)
+                const strengthCount = Math.floor(Math.random() * 3) + 2;
+                const selectedStrengths = shuffleArray(allStrengths).slice(0, strengthCount);
+                
+                selectedStrengths.forEach((strength, i) => {
+                    const item = createAnalysisItem(strength.title, strength.desc, 'success', i);
+                    strengthsList.appendChild(item);
+                });
+                
+                // Select random improvements (3-5)
+                const improvementCount = Math.floor(Math.random() * 3) + 3;
+                const selectedImprovements = shuffleArray(allImprovements).slice(0, improvementCount);
+                
+                selectedImprovements.forEach((improvement, i) => {
+                    const item = createAnalysisItem(improvement.title, improvement.desc, 'warning', i);
+                    improvementsList.appendChild(item);
+                });
+                
+                // Show results with animation
+                analysisResults.classList.add('show');
+                
+                // Scroll to results
+                setTimeout(() => {
+                    analysisResults.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 300);
+            }
+            
+            function createAnalysisItem(title, desc, type, delayIndex) {
+                const item = document.createElement('div');
+                item.className = `analysis-result-item ${type === 'success' ? 'strength-item' : 'improvement-item'} animate__animated animate__fadeIn${type === 'success' ? 'Left' : 'Right'} animate-delay-${delayIndex + 1}`;
+                
+                item.innerHTML = `
+                    <strong>${title}</strong>
+                    <p class="text-muted mb-0">${desc}</p>
+                `;
+                
+                return item;
+            }
+            
+            function resetUpload() {
+                resumeUpload.value = '';
+                fileInfo.innerHTML = '';
+                uploadStatus.classList.add('d-none');
+                analysisProgress.classList.remove('show');
+                analysisResults.classList.remove('show');
+            }
+            
+            function shuffleArray(array) {
+                return array.sort(() => Math.random() - 0.5);
+            }
+            
+            function showAlert(title, text, icon) {
+                Swal.fire({
+                    title,
+                    text,
+                    icon,
+                    confirmButtonText: 'OK'
+                });
+            }
+            
+            // Generate Optimized Resume PDF with ATS-friendly formatting
+            downloadBtn.addEventListener('click', function() {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4'
+                });
+                
+                // Set document properties
+                doc.setProperties({
+                    title: 'John Doe - Full Stack Developer Resume',
+                    subject: 'Professional Resume',
+                    author: 'John Doe',
+                    keywords: 'resume, cv, full stack developer, JavaScript, React, Node.js',
+                    creator: 'SkillForgeX AI Career Assistant'
+                });
+                
+                // Set margins and initial position
+                const margin = 15;
+                const lineHeight = 7;
+                let yPos = margin;
+                
+                // Set font styles
+                const primaryColor = '#6c63ff';
+                const darkColor = '#212529';
+                const lightColor = '#6c757d';
+                
+                // Add header with contact information
+                doc.setFontSize(18);
+                doc.setTextColor(primaryColor);
+                doc.setFont('helvetica', 'bold');
+                doc.text('JOHN DOE', margin, yPos);
+                
+                doc.setFontSize(10);
+                doc.setTextColor(darkColor);
+                doc.setFont('helvetica', 'normal');
+                yPos += lineHeight;
+                doc.text('Full Stack Developer | San Francisco, CA | john.doe@example.com | (123) 456-7890', margin, yPos);
+                
+                // Add divider line
+                yPos += lineHeight/2;
+                doc.setDrawColor(primaryColor);
+                doc.setLineWidth(0.5);
+                doc.line(margin, yPos, doc.internal.pageSize.width - margin, yPos);
+                yPos += lineHeight;
+                
+                // Add Professional Summary section
+                doc.setFontSize(12);
+                doc.setTextColor(primaryColor);
+                doc.setFont('helvetica', 'bold');
+                doc.text('PROFESSIONAL SUMMARY', margin, yPos);
+                
+                doc.setFontSize(10);
+                doc.setTextColor(darkColor);
+                yPos += lineHeight;
+                const summaryText = "Results-driven Full Stack Developer with 5+ years of experience designing and implementing web applications. Specialized in JavaScript technologies including React, Node.js, and MongoDB. Proven track record of delivering high-quality software solutions that improve business efficiency and user experience. Strong problem-solving skills and passion for clean, maintainable code.";
+                const splitSummary = doc.splitTextToSize(summaryText, doc.internal.pageSize.width - 2 * margin);
+                doc.text(splitSummary, margin, yPos);
+                yPos += (splitSummary.length * lineHeight) + lineHeight;
+                
+                // Add Technical Skills section
+                doc.setFontSize(12);
+                doc.setTextColor(primaryColor);
+                doc.setFont('helvetica', 'bold');
+                doc.text('TECHNICAL SKILLS', margin, yPos);
+                
+                doc.setFontSize(10);
+                doc.setTextColor(darkColor);
+                yPos += lineHeight;
+                
+                const skills = [
+                    { category: 'Frontend', skills: 'React, Angular, JavaScript, TypeScript, HTML5, CSS3, Sass, Bootstrap' },
+                    { category: 'Backend', skills: 'Node.js, Express, Python, Django, REST APIs, GraphQL' },
+                    { category: 'Databases', skills: 'MongoDB, PostgreSQL, MySQL, Firebase' },
+                    { category: 'DevOps & Tools', skills: 'Docker, AWS, Git, CI/CD, Jest, Mocha' }
+                ];
+                
+                skills.forEach(skill => {
+                    doc.setFont('helvetica', 'bold');
+                    doc.text(`${skill.category}:`, margin, yPos);
+                    doc.setFont('helvetica', 'normal');
+                    doc.text(skill.skills, margin + 20, yPos);
+                    yPos += lineHeight;
+                });
+                
+                yPos += lineHeight/2;
+                
+                // Add Professional Experience section
+                doc.setFontSize(12);
+                doc.setTextColor(primaryColor);
+                doc.setFont('helvetica', 'bold');
+                doc.text('PROFESSIONAL EXPERIENCE', margin, yPos);
+                yPos += lineHeight;
+                
+                const experiences = [
+                    {
+                        company: 'Tech Solutions Inc.',
+                        position: 'Senior Full Stack Developer',
+                        duration: 'Jan 2020 - Present',
+                        location: 'San Francisco, CA',
+                        achievements: [
+                            'Led a team of 5 developers to build a SaaS platform serving 50,000+ monthly active users',
+                            'Implemented microservices architecture reducing API response time by 40%',
+                            'Migrated legacy Angular application to React, improving performance by 35%',
+                            'Introduced automated testing coverage increasing from 20% to 85%'
+                        ]
+                    },
+                    {
+                        company: 'Digital Innovations LLC',
+                        position: 'Full Stack Developer',
+                        duration: 'Mar 2017 - Dec 2019',
+                        location: 'San Jose, CA',
+                        achievements: [
+                            'Developed RESTful APIs using Node.js and Express handling 10,000+ requests per minute',
+                            'Built responsive front-end interfaces with React and Redux for state management',
+                            'Optimized database queries reducing page load times by 55%',
+                            'Implemented CI/CD pipeline reducing deployment time by 70%'
+                        ]
+                    }
+                ];
+                
+                experiences.forEach(exp => {
+                    // Check if we need a new page
+                    if (yPos > doc.internal.pageSize.height - 30) {
+                        doc.addPage();
+                        yPos = margin;
+                    }
+                    
+                    // Company name
+                    doc.setFontSize(11);
+                    doc.setFont('helvetica', 'bold');
+                    doc.text(exp.company, margin, yPos);
+                    
+                    // Position and duration
+                    doc.setFont('helvetica', 'normal');
+                    doc.text(exp.position, margin + 5, yPos + lineHeight);
+                    doc.text(`${exp.duration} | ${exp.location}`, margin + 5, yPos + (lineHeight * 1.5));
+                    
+                    yPos += lineHeight * 2;
+                    
+                    // Achievements
+                    doc.setFontSize(10);
+                    exp.achievements.forEach((ach, i) => {
+                        // Check if we need a new page before adding each bullet point
+                        if (yPos > doc.internal.pageSize.height - 15) {
+                            doc.addPage();
+                            yPos = margin;
+                        }
+                        
+                        doc.text('• ' + ach, margin + 5, yPos, { maxWidth: doc.internal.pageSize.width - margin - 10 });
+                        yPos += lineHeight;
+                    });
+                    
+                    yPos += lineHeight/2;
+                });
+                
+                // Add Education section
+                doc.setFontSize(12);
+                doc.setTextColor(primaryColor);
+                doc.setFont('helvetica', 'bold');
+                doc.text('EDUCATION', margin, yPos);
+                yPos += lineHeight;
+                
+                doc.setFontSize(10);
+                doc.setTextColor(darkColor);
+                doc.setFont('helvetica', 'bold');
+                doc.text('Stanford University', margin, yPos);
+                doc.setFont('helvetica', 'normal');
+                doc.text('Master of Computer Science | 2015 - 2017', margin + 5, yPos + lineHeight);
+                
+                doc.setFont('helvetica', 'bold');
+                doc.text('University of California, Berkeley', margin, yPos + (lineHeight * 2));
+                doc.setFont('helvetica', 'normal');
+                doc.text('Bachelor of Science in Computer Engineering | 2011 - 2015', margin + 5, yPos + (lineHeight * 3));
+                
+                yPos += lineHeight * 4;
+                
+                // Add Certifications section
+                doc.setFontSize(12);
+                doc.setTextColor(primaryColor);
+                doc.setFont('helvetica', 'bold');
+                doc.text('CERTIFICATIONS', margin, yPos);
+                yPos += lineHeight;
+                
+                doc.setFontSize(10);
+                doc.setTextColor(darkColor);
+                doc.text('• AWS Certified Developer - Associate (2022)', margin, yPos);
+                doc.text('• Google Professional Cloud Architect (2021)', margin, yPos + lineHeight);
+                doc.text('• Certified ScrumMaster (CSM) (2020)', margin, yPos + (lineHeight * 2));
+                
+                // Add footer
+                doc.setFontSize(8);
+                doc.setTextColor(150, 150, 150);
+                doc.text('Generated by SkillForgeX AI Career Assistant', doc.internal.pageSize.width / 2, doc.internal.pageSize.height - 10, { align: 'center' });
+                
+                // Save the PDF
+                doc.save('John_Doe_Full_Stack_Developer_Resume.pdf');
+                
+                Swal.fire({
+                    title: 'Download Complete!',
+                    text: 'Your optimized ATS-friendly resume has been downloaded.',
+                    icon: 'success',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            });
+            
+            // Task Management
+            const taskList = document.getElementById('taskList');
+            const taskCompletion = document.getElementById('taskCompletion');
+            const addTaskBtn = document.getElementById('addTaskBtn');
+            
+            // Initialize task completion count
+            updateTaskCompletion();
+            
+            // Add event listeners to existing tasks
+            function initializeTaskItems() {
+                Array.from(taskList.children).forEach(task => {
+                    const checkbox = task.querySelector('input');
+                    const deleteBtn = task.querySelector('.delete-task-btn');
+                    
+                    // Checkbox handler
+                    checkbox.addEventListener('change', function() {
+                        updateTaskStatus(task, this.checked);
+                        updateTaskCompletion();
+                    });
+                    
+                    // Delete button handler
+                    deleteBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        deleteTask(task);
+                    });
+                });
+            }
+            
+            // Initialize existing tasks
+            initializeTaskItems();
+            
+            // Update task completion count
+            function updateTaskCompletion() {
+                const totalTasks = taskList.children.length;
+                const completedTasks = Array.from(taskList.children).filter(
+                    task => task.querySelector('input').checked
+                ).length;
+                
+                taskCompletion.textContent = `${completedTasks}/${totalTasks} completed`;
+            }
+            
+            // Update task status (completed/pending)
+            function updateTaskStatus(task, isCompleted) {
+                const badge = task.querySelector('.badge');
+                
+                if (isCompleted) {
+                    badge.classList.remove('bg-warning');
+                    badge.classList.add('bg-success');
+                    badge.textContent = 'Completed';
+                    task.classList.add('animate__animated', 'animate__pulse');
+                    
+                    setTimeout(() => {
+                        task.classList.remove('animate__animated', 'animate__pulse');
+                    }, 1000);
+                } else {
+                    badge.classList.remove('bg-success');
+                    badge.classList.add('bg-warning');
+                    badge.textContent = 'Pending';
+                }
+            }
+            
+            // Delete a task
+            function deleteTask(task) {
+                task.classList.add('animate__animated', 'animate__fadeOut');
+                
+                setTimeout(() => {
+                    task.remove();
+                    updateTaskCompletion();
+                }, 300);
+            }
+            
+            // Add new task
+            addTaskBtn.addEventListener('click', function() {
+                Swal.fire({
+                    title: 'Add New Task',
+                    html: `
+                        <div class="mb-3">
+                            <label for="taskTitle" class="form-label">Task Title</label>
+                            <input type="text" class="form-control" id="taskTitle" placeholder="Enter task title">
+                        </div>
+                        <div class="mb-3">
+                            <label for="taskPriority" class="form-label">Priority</label>
+                            <select class="form-select" id="taskPriority">
+                                <option value="low">Low</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                        </div>
+                    `,
+                    showCancelButton: true,
+                    confirmButtonText: 'Add Task',
+                    cancelButtonText: 'Cancel',
+                    focusConfirm: false,
+                    preConfirm: () => {
+                        const title = document.getElementById('taskTitle').value;
+                        if (!title) {
+                            Swal.showValidationMessage('Please enter a task title');
+                            return false;
+                        }
+                        return {
+                            title: title,
+                            priority: document.getElementById('taskPriority').value
+                        };
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const newTask = document.createElement('div');
+                        newTask.className = 'list-group-item task-list-item d-flex justify-content-between align-items-center animate__animated animate__fadeIn';
+                        newTask.innerHTML = `
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="task-${Date.now()}">
+                                <label class="form-check-label" for="task-${Date.now()}">${result.value.title}</label>
+                            </div>
+                            <div>
+                                <span class="badge bg-warning me-2">Pending</span>
+                                <button class="btn btn-sm btn-outline-danger delete-task-btn">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        `;
+                        
+                        // Add event listeners to new task
+                        const checkbox = newTask.querySelector('input');
+                        const deleteBtn = newTask.querySelector('.delete-task-btn');
+                        
+                        checkbox.addEventListener('change', function() {
+                            updateTaskStatus(newTask, this.checked);
+                            updateTaskCompletion();
+                        });
+                        
+                        deleteBtn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            deleteTask(newTask);
+                        });
+                        
+                        taskList.appendChild(newTask);
+                        updateTaskCompletion();
+                        
+                        // Scroll to the new task
+                        setTimeout(() => {
+                            newTask.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        }, 100);
+                        
+                        Swal.fire(
+                            'Task Added!',
+                            'Your new task has been added to your list.',
+                            'success'
+                        );
+                    }
+                });
+            });
+            
+            // Skill Development Roadmap Navigation
+            const roadmapProgress = document.getElementById('roadmapProgress');
+            const prevStageBtn = document.getElementById('prevStageBtn');
+            const nextStageBtn = document.getElementById('nextStageBtn');
+            
+            let currentStage = 1;
+            const totalStages = 4;
+            const stages = ['foundation-stage', 'frontend-stage', 'backend-stage', 'advanced-stage'];
+            
+            function updateRoadmapProgress() {
+                const progress = (currentStage / totalStages) * 100;
+                roadmapProgress.style.width = `${progress}%`;
+                roadmapProgress.setAttribute('aria-valuenow', progress);
+                
+                // Enable/disable buttons based on current stage
+                prevStageBtn.disabled = currentStage <= 1;
+                nextStageBtn.disabled = currentStage >= totalStages;
+                
+                // Update active stage
+                document.querySelectorAll('.timeline-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                const currentStageId = stages[currentStage - 1];
+                if (currentStageId) {
+                    document.getElementById(currentStageId).classList.add('active');
+                }
+            }
+            
+            prevStageBtn.addEventListener('click', function() {
+                if (currentStage > 1) {
+                    currentStage--;
+                    updateRoadmapProgress();
+                }
+            });
+            
+            nextStageBtn.addEventListener('click', function() {
+                if (currentStage < totalStages) {
+                    currentStage++;
+                    updateRoadmapProgress();
+                }
+            });
+            
+            // Career Roadmap Navigation
+            const roadmapProgressBar = document.getElementById('roadmapProgressBar');
+            const prevStageBtnRoadmap = document.getElementById('prevStageBtnRoadmap');
+            const nextStageBtnRoadmap = document.getElementById('nextStageBtnRoadmap');
+            
+            let currentRoadmapStage = 1;
+            const totalRoadmapStages = 4;
+            const roadmapStages = [
+                'foundation-stage-career',
+                'projects-stage-career',
+                'resume-stage-career',
+                'interview-stage-career'
+            ];
+            
+            function updateRoadmapBarProgress() {
+                const progress = (currentRoadmapStage / totalRoadmapStages) * 100;
+                roadmapProgressBar.style.width = `${progress}%`;
+                roadmapProgressBar.setAttribute('aria-valuenow', progress);
+                
+                // Enable/disable buttons based on current stage
+                prevStageBtnRoadmap.disabled = currentRoadmapStage <= 1;
+                nextStageBtnRoadmap.disabled = currentRoadmapStage >= totalRoadmapStages;
+                
+                // Update active stage
+                document.querySelectorAll('.roadmap-stage').forEach(stage => {
+                    stage.classList.remove('active');
+                });
+                
+                const currentStageId = roadmapStages[currentRoadmapStage - 1];
+                if (currentStageId) {
+                    document.getElementById(currentStageId).classList.add('active');
+                }
+            }
+            
+            prevStageBtnRoadmap.addEventListener('click', function() {
+                if (currentRoadmapStage > 1) {
+                    currentRoadmapStage--;
+                    updateRoadmapBarProgress();
+                }
+            });
+            
+            nextStageBtnRoadmap.addEventListener('click', function() {
+                if (currentRoadmapStage < totalRoadmapStages) {
+                    currentRoadmapStage++;
+                    updateRoadmapBarProgress();
+                }
+            });
+            
+            // Initialize roadmap progress
+            updateRoadmapProgress();
+            updateRoadmapBarProgress();
+            
+            // Button functionality
+            resourcesBtn.addEventListener('click', function() {
+                Swal.fire({
+                    title: 'Recommended Learning Resources',
+                    html: `
+                        <div class="text-start">
+                            <h5 class="mb-3">Based on your resume analysis, we recommend:</h5>
+                            <ul class="list-group">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Advanced JavaScript Courses
+                                    <span class="badge bg-primary">New</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    System Design Interview Prep
+                                    <span class="badge bg-success">Popular</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Agile Methodology Tutorials
+                                    <span class="badge bg-warning">Recommended</span>
+                                </li>
+                            </ul>
+                        </div>
+                    `,
+                    confirmButtonText: 'View Resources',
+                    width: '800px'
+                });
+            });
+            
+            // Read Article buttons
+            document.querySelectorAll('.read-article-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const card = this.closest('.card');
+                    const title = card.querySelector('.card-title').textContent;
+                    const badge = card.querySelector('.badge').textContent;
+                    
+                    let content = '';
+                    
+                    if (badge === 'React') {
+                        content = `
+                            <h4>Advanced React Patterns</h4>
+                            <p>React patterns are solutions to common problems that developers face when building applications with React. Learning these patterns will help you write more maintainable and efficient React code.</p>
+                            
+                            <h5>Compound Components</h5>
+                            <p>Compound components are a pattern where components work together to form a complete UI. The classic example is the <code>select</code> and <code>option</code> elements in HTML. In React, you can create compound components using the Context API or by implicitly sharing state between components.</p>
+                            
+                            <h5>Render Props</h5>
+                            <p>The render prop pattern involves passing a function as a prop to a component, which the component then calls to render its content. This pattern is useful for sharing logic between components without relying on higher-order components.</p>
+                            
+                            <h5>Higher-Order Components</h5>
+                            <p>Higher-order components (HOCs) are functions that take a component and return a new component with additional props or behavior. HOCs are useful for cross-cutting concerns like authentication, logging, or data fetching.</p>
+                            
+                            <p>By mastering these patterns, you'll be able to create more flexible and reusable React components that are easier to maintain and test.</p>
+                        `;
+                    } else if (badge === 'Node.js') {
+                        content = `
+                            <h4>Node.js Performance Optimization</h4>
+                            <p>Node.js is known for its high performance, but there are still many optimizations you can make to ensure your applications run as efficiently as possible.</p>
+                            
+                            <h5>Cluster Module</h5>
+                            <p>Node.js runs on a single thread by default. The cluster module allows you to create child processes that share server ports, effectively utilizing all CPU cores on your machine.</p>
+                            
+                            <h5>Stream Processing</h5>
+                            <p>Instead of loading entire files into memory, use streams to process data in chunks. This is especially important for large files or when dealing with real-time data.</p>
+                            
+                            <h5>Caching Strategies</h5>
+                            <p>Implement proper caching at multiple levels - in-memory caching with modules like Redis, HTTP caching headers, and database query caching can significantly reduce response times.</p>
+                            
+                            <h5>Memory Management</h5>
+                            <p>Monitor your application's memory usage and look for memory leaks. Tools like the Node.js inspector and heap snapshots can help identify issues.</p>
+                            
+                            <p>By applying these techniques, you can dramatically improve the performance and scalability of your Node.js applications.</p>
+                        `;
+                    } else if (badge === 'System Design') {
+                        content = `
+                            <h4>Designing a URL Shortener</h4>
+                            <p>URL shorteners like bit.ly are a classic system design interview question that tests your ability to design scalable systems.</p>
+                            
+                            <h5>Requirements</h5>
+                            <ul>
+                                <li>Generate short aliases for long URLs</li>
+                                <li>Redirect users from short URL to original URL</li>
+                                <li>High availability and low latency</li>
+                                <li>Support for analytics</li>
+                            </ul>
+                            
+                            <h5>Key Components</h5>
+                            <p><strong>Short URL Generation:</strong> Use a base-62 encoding of an auto-incremented ID or a hash of the original URL.</p>
+                            <p><strong>Database:</strong> Use a distributed key-value store like Cassandra or DynamoDB for high write throughput.</p>
+                            <p><strong>Cache:</strong> Implement a caching layer with Redis to reduce database load for frequently accessed URLs.</p>
+                            <p><strong>Load Balancer:</strong> Distribute traffic across multiple servers to handle high request volumes.</p>
+                            
+                            <h5>Scaling Considerations</h5>
+                            <p>Consider rate limiting to prevent abuse, data partitioning for the database, and implementing a CDN for global performance.</p>
+                            
+                            <p>This design demonstrates how to break down a complex system into manageable components while considering performance and scalability.</p>
+                        `;
+                    }
+                    
+                    Swal.fire({
+                        title: title,
+                        html: `
+                            <div class="text-start">
+                                ${content}
+                                <hr>
+                                <div class="text-center mt-3">
+                                    <button class="btn btn-primary" onclick="Swal.close()">
+                                        Continue Learning
+                                    </button>
+                                </div>
+                            </div>
+                        `,
+                        width: '800px',
+                        showConfirmButton: false
+                    });
+                });
+            });
+            
+            // View All Resources with filter functionality
+            document.getElementById('viewAllResourcesBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Create filter buttons
+                const filterButtons = `
+                    <div class="resource-filter d-flex flex-wrap gap-2 mb-3">
+                        <span class="badge bg-primary active" data-filter="all">All</span>
+                        <span class="badge bg-secondary" data-filter="javascript">JavaScript</span>
+                        <span class="badge bg-secondary" data-filter="react">React</span>
+                        <span class="badge bg-secondary" data-filter="node">Node.js</span>
+                        <span class="badge bg-secondary" data-filter="design">System Design</span>
+                    </div>
+                `;
+                
+                // Create resource items
+                const resourceItems = `
+                    <div class="list-group" id="resourcesList">
+                        <a href="#" class="list-group-item list-group-item-action resource-item" data-category="javascript">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">Advanced JavaScript Patterns</h5>
+                                <small>3 days ago</small>
+                            </div>
+                            <p class="mb-1">Master modern JavaScript patterns and best practices.</p>
+                            <small>18 min read</small>
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action resource-item" data-category="react">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">React Hooks Deep Dive</h5>
+                                <small>1 week ago</small>
+                            </div>
+                            <p class="mb-1">Comprehensive guide to React Hooks and state management.</p>
+                            <small>15 min read</small>
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action resource-item" data-category="node">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">Node.js Performance Optimization</h5>
+                                <small>2 weeks ago</small>
+                            </div>
+                            <p class="mb-1">Techniques to improve your Node.js application performance.</p>
+                            <small>12 min read</small>
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action resource-item" data-category="design">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">System Design Fundamentals</h5>
+                                <small>3 weeks ago</small>
+                            </div>
+                            <p class="mb-1">Learn the core concepts of scalable system design.</p>
+                            <small>25 min read</small>
+                        </a>
+                    </div>
+                `;
+                
+                Swal.fire({
+                    title: 'All Learning Resources',
+                    html: `
+                        <div class="text-start">
+                            <h5 class="mb-3">Filter Resources</h5>
+                            ${filterButtons}
+                            ${resourceItems}
+                        </div>
+                    `,
+                    confirmButtonText: 'Close',
+                    width: '800px',
+                    didOpen: () => {
+                        // Add filter functionality
+                        const filterBadges = document.querySelectorAll('.resource-filter .badge');
+                        const resourceItems = document.querySelectorAll('.resource-item');
+                        
+                        filterBadges.forEach(badge => {
+                            badge.addEventListener('click', function() {
+                                // Update active state
+                                filterBadges.forEach(b => b.classList.remove('active'));
+                                this.classList.add('active');
+                                
+                                const filter = this.dataset.filter;
+                                
+                                // Filter resources
+                                resourceItems.forEach(item => {
+                                    if (filter === 'all' || item.dataset.category === filter) {
+                                        item.style.display = 'block';
+                                    } else {
+                                        item.style.display = 'none';
+                                    }
+                                });
+                            });
+                        });
+                    }
+                });
+            });
+            
+            // Fixed Navigation Highlighting
+            const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+            const sections = document.querySelectorAll('section');
+            
+            // Set active link based on scroll position
+            window.addEventListener('scroll', function() {
+                const scrollPosition = window.scrollY + 100;
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.offsetHeight;
+                    const sectionId = section.getAttribute('id');
+                    
+                    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${sectionId}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            });
+            
+            // Set active link when clicked
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    // Remove active class from all links
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    
+                    // Add active class to clicked link
+                    this.classList.add('active');
+                    
+                    // Get target section
+                    const targetId = this.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+                    
+                    if (targetSection) {
+                        e.preventDefault();
+                        
+                        // Scroll to section
+                        window.scrollTo({
+                            top: targetSection.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                        
+                        // Update URL hash
+                        history.pushState(null, null, targetId);
+                    }
+                });
+            });
+            
+            // Subscribe functionality
+            document.getElementById('subscribeBtn').addEventListener('click', function() {
+                const email = document.getElementById('newsletterEmail').value;
+                if (email && email.includes('@')) {
+                    Swal.fire(
+                        'Subscribed!',
+                        'Thank you for subscribing to our newsletter.',
+                        'success'
+                    );
+                    document.getElementById('newsletterEmail').value = '';
+                } else {
+                    Swal.fire(
+                        'Invalid Email',
+                        'Please enter a valid email address.',
+                        'error'
+                    );
+                }
+            });
+            
+            // Smooth scrolling for navigation
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+            
+            // Show welcome message
+            setTimeout(() => {
+                Swal.fire({
+                    title: 'Welcome to SkillForgeX!',
+                    text: 'Your AI-powered career assistant is ready to help you grow.',
+                    icon: 'success',
+                    confirmButtonText: 'Get Started',
+                    showClass: {
+                        popup: 'animate__animated animate__fadeIn'
+                    },
+                    hideClass: {
+                        popup: 'animate__animated animate__fadeOut'
+                    }
+                });
+            }, 1500);
+            
+            // Initialize animations
+            setTimeout(initAnimations, 1200);
+        });
+    </script>
+</body>
+</html>
